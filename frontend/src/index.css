@@ -1,0 +1,29 @@
+html {
+    font-size: 1rem;
+}
+
+body {
+    margin: 0px;
+    height: 100%;
+    padding: 2rem;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background-color: #6676d3;
+    font-family: var(--font-family);
+    font-weight: normal;
+    color: var(--text-color);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.page-wrapper {
+    padding: 30px 15px;
+}
+
+.p-dropdown, .p-multiselect {
+    width: 350px;
+}
+
+.p-button {
+    width: 80px;
+}
