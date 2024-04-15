@@ -10,7 +10,11 @@ import { useForm, Controller } from "react-hook-form";
 import { Card } from 'primereact/card';
 import { ScoreTable } from './ScoreTable';
 
-const methodOptions = [{ label:'Bert', value: 'bert' }, { label: 'Ngram', value: 'ngram' }]
+const methodOptions = [
+    { label:'Bert', value: 'bert' },
+    { label: 'Ngram', value: 'ngram' },
+    { label: 'Chainpoll', value: 'chainpoll' }
+]
 
 export function Home() {
  const initState = {
@@ -90,7 +94,7 @@ export function Home() {
             render={({ field, fieldState }) => (
                 <>
                  <label htmlFor="question" className={classNames({ 'p-error': errors.question })}>Question:</label>
-                 <InputText id={field.question} {...field} className={classNames({ 'p-invalid': fieldState.invalid })} />
+                 <InputTextarea id={field.question} {...field} rows={4} cols={30} className={classNames({ 'p-invalid': fieldState.invalid })} />
                  {getFormErrorMessage('question')}
                 </>
              )}
@@ -100,8 +104,8 @@ export function Home() {
             control={control}
             render={({ field, fieldState }) => (
                 <>
-                 <label htmlFor="answer">Answer:</label>
-                 <InputTextarea id={field.question} rows={4} cols={30} {...field} />
+                 <label htmlFor="answer">Answer (optional):</label>
+                 <InputTextarea id={field.answer} rows={4} cols={30} {...field} />
                 </>
              )}
          />

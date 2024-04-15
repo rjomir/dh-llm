@@ -1,9 +1,9 @@
 from flask.views import MethodView
 from flask_smorest import Blueprint
 
-from services.parsers.DollyParser import DollyParser
-from services.parsers.DropParser import DropParser
-from services.parsers.CovidParser import CovidParser
+from lib.parsers.DollyParser import DollyParser
+from lib.parsers.DropParser import DropParser
+from lib.parsers.CovidParser import CovidParser
 
 blp = Blueprint("Benchmarks", __name__, description="Operations in benchmarks")
 

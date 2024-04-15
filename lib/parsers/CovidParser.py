@@ -1,5 +1,5 @@
 from datasets import load_dataset
-from services.parsers.parser import Parser
+from lib.parsers.parser import Parser
 
 
 class CovidParser(Parser):

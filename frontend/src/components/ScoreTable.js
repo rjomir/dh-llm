@@ -7,6 +7,7 @@ export function ScoreTable(props){
         <TreeTable value={getNodes(data, Object.keys(data))} scrollable scrollHeight="400px">
             <Column field="name" header="Name" expander></Column>
             <Column field="question" header="Question"></Column>
+            <Column field="answer" header="Answer"></Column>
             <Column field="score" header="Score"></Column>
         </TreeTable>
     )
@@ -27,7 +28,8 @@ const getNodes = (data, methods) => {
             key: `${index}-${childIndex}`,
             data: {
                 "question": children.question,
-                "score": children.score || children.score[0]
+                "answer": children.answer,
+                "score": Array.isArray(children.score) ? children.score[0] : children.score
             }
         }))
 

@@ -1,15 +1,17 @@
-flask
+flask~=3.0.2
 flask-smorest
 flask-cors
 python-dotenv
-marshmallow
-sqlalchemy
+marshmallow~=3.21.1
+sqlalchemy~=2.0.29
 flask-sqlalchemy
 flask-migrate
-datasets
-alembic
+datasets~=2.18.0
+alembic~=1.13.1
 nltk
 spacy>=3.0.0,<4.0.0
 en_core_web_sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.7.1/en_core_web_sm-3.7.1-py3-none-any.whl
 numpy
-selfcheckgpt
+selfcheckgpt~=0.1.7
+openai~=1.16.2
+requests~=2.31.0

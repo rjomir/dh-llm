@@ -16,7 +16,11 @@ import { Card } from 'primereact/card';
 import { useForm, Controller } from "react-hook-form";
 
 const datasetOptions = [{ label:'COVID-QA', value: 'covid-qa' }, { label: 'Drop', value: 'drop' }, { label:'Databricks Dolly', value: 'databricks-dolly' }]
-const methodOptions = [{ label:'Bert', value: 'bert' }, { label: 'Ngram', value: 'ngram' }]
+const methodOptions = [
+    { label:'Bert', value: 'bert' },
+    { label: 'Ngram', value: 'ngram' },
+    { label: 'Chainpoll', value: 'chainpoll' }
+]
 
 export const Benchmarks = () => {
   const initialState = {

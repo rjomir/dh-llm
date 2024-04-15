@@ -1,18 +1,19 @@
 from flask.views import MethodView
-from flask_smorest import Blueprint, abort
-from sqlalchemy.exc import SQLAlchemyError
+from flask_smorest import Blueprint
 
+import config
 from db import db
 from models import SettingsModel
 from schemas import SettingsSchema
 
 blp = Blueprint("Settings", __name__, description="Operations in settings")
 
+
 @blp.route("/settings")
 class Settings(MethodView):
-    @blp.response(200, SettingsSchema(many=True))
+    @blp.response(200, SettingsSchema)
     def get(self):
-        SettingsModel.query.all()
+        return SettingsModel.query.first_or_404()
 
     def delete(self):
         settings = SettingsModel.query.get()
@@ -26,10 +27,16 @@ class Settings(MethodView):
     @blp.response(200, SettingsSchema)
     def post(self, settings_data):
         settings = SettingsModel(**settings_data)
-        try:
-            db.session.add(settings)
-            db.sessioin.commit()
-        except SQLAlchemyError:
-            abort(500, message="An error occurred creating settings.")
+        existing_settings = SettingsModel.query.first()
 
-        return settings
+        try:
+            if existing_settings:
+                for key, value in settings_data.items():
+                    setattr(existing_settings, key, value)
+            else:
+                db.session.add(settings)
+            db.session.commit()
+            return existing_settings
+        except Exception as e:
+            db.session.rollback()
+            return {'error': str(e)}, 500

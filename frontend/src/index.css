@@ -20,10 +20,29 @@ body {
     padding: 30px 15px;
 }
 
-.p-dropdown, .p-multiselect {
+.content {
+    padding: 20px 0;
+}
+
+form .p-dropdown, .p-multiselect, .p-inputtext:not(.p-inputtextarea) {
     width: 350px;
 }
 
-.p-button {
+form .p-inputtextarea {
+   width: 650px;
+}
+
+form .p-button {
     width: 80px;
+}
+
+.p-selectbutton {
+    .p-button.p-highlight {
+        background: #3F51B5;
+        color: #ffffff;
+        -webkit-transition: none !important;
+        -moz-transition: none !important;
+        -o-transition: none !important;
+        transition: none !important;
+    }
 }

@@ -8,4 +8,4 @@ class ScoreCheckerSchema(Schema):
 
 class SettingsSchema(Schema):
     id = fields.Str(dump_only=True)
-    openApiKey = fields.Str()
+    openaiKey = fields.Str()
