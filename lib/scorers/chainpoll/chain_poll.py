@@ -6,6 +6,7 @@ from lib.handlers import OpenAIHandler
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+
 class ChainPoll:
     def __init__(self, dataset=None, n=5):
         if dataset is None:

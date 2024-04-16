@@ -32,12 +32,15 @@ class OpenAIHandler:
             if not self.client:
                 self.fetch_settings()
 
+            if self.settings["openaiMaxTokens"]:
+                max_new_tokens = self.settings["openaiMaxTokens"]
+
             response = self.client.completions.create(
                 prompt=prompt,
-                max_tokens=max_new_tokens,
+                max_tokens=int(max_new_tokens),
                 n=n,
                 temperature=temperature,
-                model='gpt-3.5-turbo-instruct'
+                model=self.settings["openaiModel"]
             )
 
             results = [r.text.strip() for r in response.choices]
