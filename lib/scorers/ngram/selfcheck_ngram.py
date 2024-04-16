@@ -1,6 +1,6 @@
 import spacy
 from selfcheckgpt.modeling_ngram import UnigramModel, NgramModel
-from lib.handlers import OpenAIHandler
+from config import llm_handler
 
 
 class SelfCheckNgram:
@@ -11,7 +11,7 @@ class SelfCheckNgram:
         self.lowercase = lowercase
         self.dataset = dataset
         self.nlp = spacy.load("en_core_web_sm")
-        self.ai_handler = OpenAIHandler()
+
         print(f"SelfCheck-{n}gram initialized")
 
     def evaluate(self):
@@ -27,7 +27,7 @@ class SelfCheckNgram:
         for entity in self.dataset:
             answer = entity["answer"]
             if not answer:
-                answer = self.ai_handler.ask_llm(prompt=entity["question"])[0]
+                answer = llm_handler.ask_llm(prompt=entity["question"])[0]
             passage = entity["question"] + '.' + answer
             ngram_model.add(passage)
             ngram_model.train()

@@ -1,36 +1,23 @@
 import logging
 
-import requests
 from openai import OpenAI, APIError
-from requests import RequestException
+from .DbResource import DbResource
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-base_url = 'http://127.0.0.1:5000'
-
 
 class OpenAIHandler:
     def __init__(self):
-        self.settings = None
         self.client = None
-
-    def fetch_settings(self):
-        try:
-            response = requests.get('http://127.0.0.1:5000/settings')
-            response.raise_for_status()
-            self.settings = response.json()
-            logger.info("Settings fetched successfully.")
-
-            self.client = OpenAI(api_key=self.settings['openaiKey'])
-        except RequestException as e:
-            logger.error(f"Failed to fetch settings: {e}")
-            raise
+        self.settings = None
+        self.settings_db_resource = DbResource('settings')
 
     def ask_llm(self, prompt, n=1, temperature=0, max_new_tokens=400):
         try:
             if not self.client:
-                self.fetch_settings()
+                self.settings = self.settings_db_resource.fetch()
+                self.client = OpenAI(api_key=self.settings['openaiKey'])
 
             if self.settings["openaiMaxTokens"]:
                 max_new_tokens = self.settings["openaiMaxTokens"]

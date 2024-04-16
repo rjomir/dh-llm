@@ -8,8 +8,8 @@ from resources.Settings import blp as SettingsBlueprint
 from resources.Benchmark import blp as BenchmarkBlueprint
 from resources.ScoreChecker import blp as ScoreCheckerBluePrint
 from db import db
-import config
 
+import config
 
 def create_app(db_url=None):
     app = Flask(__name__)
@@ -27,7 +27,6 @@ def create_app(db_url=None):
     db.init_app(app)
     Migrate(app, db)
     api = Api(app)
-    config.init()
 
     api.register_blueprint(SettingsBlueprint)
     api.register_blueprint(BenchmarkBlueprint)

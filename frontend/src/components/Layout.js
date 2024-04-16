@@ -1,4 +1,4 @@
-import { Link, Outlet, useNavigate, useLocation } from 'react-router-dom';
+import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 
 import { TabMenu } from 'primereact/tabmenu';
 import { Card } from 'primereact/card';

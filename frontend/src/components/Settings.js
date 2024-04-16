@@ -20,7 +20,7 @@ export const Settings = () => {
     gEvalSamplingNr: 0,
   };
 
-  const [selectedSettings, setSelectedSettings] = React.useState(3);
+  const [selectedSettings, setSelectedSettings] = React.useState(1);
   const [loading, setLoading] = React.useState(false);
 
   const { handleSubmit, control, reset } = useForm({

@@ -1,7 +1,7 @@
 import logging
 
 import spacy
-from lib.handlers import OpenAIHandler
+from config import llm_handler
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -13,7 +13,6 @@ class ChainPoll:
             dataset = []
         self.dataset = dataset
         self.n = n
-        self.ai_handler = OpenAIHandler()
         self.nlp = spacy.load("en_core_web_sm")
         print(f"Chainpoll initialized")
 
@@ -25,7 +24,7 @@ class ChainPoll:
             question = entity["question"]
             answer = entity["answer"]
             if not answer:
-                answer = self.ai_handler.ask_llm(prompt=question)[0]
+                answer = llm_handler.ask_llm(prompt=question)[0]
             prompt = f'''
                 Does the following completion contain hallucinations?
                 Completion: {answer}
@@ -37,7 +36,7 @@ class ChainPoll:
                 Does this completion contain hallucinations?
                 '''
 
-            response = self.ai_handler.ask_llm(prompt, self.n)
+            response = llm_handler.ask_llm(prompt, self.n)
             yes_answers = 0
 
             for text in response:

@@ -2,7 +2,8 @@ import logging
 import time
 
 import spacy
-from lib.handlers import OpenAIHandler
+
+from config import llm_handler
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -53,8 +54,7 @@ class GEval:
         if dataset is None:
             dataset = []
         self.dataset = dataset
-        self.n = n
-        self.ai_handler = OpenAIHandler()
+        self.settings = None
         self.nlp = spacy.load("en_core_web_sm")
         print(f"G-Eval initialized")
 
@@ -67,19 +67,18 @@ class GEval:
             question = entity['question']
             answer = entity['answer']
             if not answer:
-                answer = self.ai_handler.ask_llm(prompt=question)[0]
+                answer = llm_handler.ask_llm(prompt=question)[0]
             cur_prompt = prompt.replace('{{Question}}', question).replace('{{Answer}}', answer)
             entity['prompt'] = cur_prompt
             while True:
                 try:
-                    _response = self.ai_handler.ask_llm(
+                    _response = llm_handler.ask_llm(
                         prompt=cur_prompt,
-                        temperature=2,
+                        temperature=0,
                         max_new_tokens=5,
-                        n=20
+                        n=2
                     )
                     time.sleep(0.5)
-
                     all_responses = [_response['choices'][i]['message']['content'] for i in
                                      range(len(_response['choices']))]
                     entity['all_responses'] = all_responses
@@ -93,7 +92,6 @@ class GEval:
                     else:
                         ignore += 1
                         print('ignored', ignore)
-
                         break
 
         return results

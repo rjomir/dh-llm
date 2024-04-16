@@ -2,7 +2,7 @@ import concurrent.futures
 
 from flask.views import MethodView
 from flask_smorest import Blueprint
-from lib.scorers import ngram, bert, chainpoll
+from lib.scorers import ngram, bert, chainpoll, geval
 
 from schemas import ScoreCheckerSchema
 
@@ -29,6 +29,8 @@ class ScoreChecker(MethodView):
                     checker = bert.SelfCheckBert(dataset)
                 elif method == 'chainpoll':
                     checker = chainpoll.ChainPoll(dataset)
+                elif method == 'g-eval':
+                    checker = geval.GEval(dataset)
                 future = executor.submit(checker.evaluate)
                 futures.append((method, future))
 

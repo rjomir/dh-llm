@@ -19,14 +19,12 @@ export function ScoreTable(props) {
 
 const getNodes = (data, methods) => {
   let nodes = [];
-  console.log(methods);
-  console.log(data);
   methods.forEach((method, index) => {
     const node = {};
     node['key'] = index;
     node['label'] = method;
     node['data'] = {
-      name: method,
+      name: method.charAt(0).toUpperCase() + method.slice(1),
     };
     node.children = data[method].map((children, childIndex) => ({
       key: `${index}-${childIndex}`,
