@@ -7,7 +7,9 @@ Large Language Model Hallucinations Detector (Python/Flask + React/PrimeReact)
    <br />
    App API will be available under this address: ```http://127.0.0.1:5005/path```
 
-3. CD into frontend directory and run ```npm install```
-4. Start frontend app ```npm start```.
+3. API schema can be viewed in swagger interface: ```http://127.0.0.1:5005/swagger-ui```
+
+4. CD into frontend directory and run ```npm install```
+5. Start frontend app ```npm start```.
    <br />
    SPA should start in browser with the address: ```http://127.0.0.1:3000/```
