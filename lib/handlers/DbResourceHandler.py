@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 base_url = 'http://127.0.0.1:5000/'
 
 
-class DbResource:
+class DbResourceHandler:
     def __init__(self, path):
         self.resourceUrl = base_url + path
 

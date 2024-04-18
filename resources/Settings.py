@@ -1,12 +1,13 @@
 from flask.views import MethodView
 from flask_smorest import Blueprint
 
-import config
 from db import db
 from models import SettingsModel
 from schemas import SettingsSchema
 
 blp = Blueprint("Settings", __name__, description="Operations in settings")
+
+settings_schema = SettingsSchema()
 
 
 @blp.route("/settings")
@@ -31,12 +32,12 @@ class Settings(MethodView):
 
         try:
             if existing_settings:
-                for key, value in settings_data.items():
-                    setattr(existing_settings, key, value)
+                existing_settings.content = settings_data['content']
             else:
+                settings = SettingsModel(content=settings_data['content'])
                 db.session.add(settings)
             db.session.commit()
-            return existing_settings
+            return settings_schema.dump(existing_settings) if existing_settings else settings_schema.dump(settings), 200
         except Exception as e:
             db.session.rollback()
             return {'error': str(e)}, 500

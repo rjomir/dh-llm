@@ -1,14 +1,18 @@
-import spacy
+import logging
+
 from selfcheckgpt.modeling_selfcheck import SelfCheckBERTScore
-from config import llm_handler
+from .base import Base
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
-class SelfCheckBert:
+class SelfCheckBert(Base):
     def __init__(self, dataset=None):
+        super().__init__()
         if dataset is None:
             dataset = []
         self.dataset = dataset
-        self.nlp = spacy.load("en_core_web_sm")
         print(f"SelfCheck-Bert initialized")
 
     def evaluate(self):
@@ -18,10 +22,11 @@ class SelfCheckBert:
         for entity in self.dataset:
             answer = entity["answer"]
             if not answer:
-                answer = llm_handler.ask_llm(prompt=entity["question"])[0]
+                answer = self.ask_llm(entity["question"])
 
             passage = entity["question"] + '.' + answer
-            sentences = [sent.text.strip() for sent in self.nlp(passage).sents]
+            sentences = self.extract_sentence(passage)
+            logger.info(sentences)
             bert_pred = bert_model.predict(sentences=sentences, sampled_passages=[passage])
             results.append({
                 "question": entity['question'],

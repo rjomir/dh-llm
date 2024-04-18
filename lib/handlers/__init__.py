@@ -1,2 +1,3 @@
-from .DbResource import DbResource
+from .SentenceExtractorHandler import SentenceExtractorHandler
+from .DbResourceHandler import DbResourceHandler
 from .OpenAIHandler import OpenAIHandler

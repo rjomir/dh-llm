@@ -1,9 +1,6 @@
 import logging
 import time
-
-import spacy
-
-from config import llm_handler
+from .base import Base
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -49,13 +46,15 @@ Evaluation Form (scores ONLY):
 '''
 
 
-class GEval:
+class GEval(Base):
     def __init__(self, dataset=None, n=5):
+        super().__init__()
         if dataset is None:
             dataset = []
         self.dataset = dataset
-        self.settings = None
-        self.nlp = spacy.load("en_core_web_sm")
+        self.n = n
+        if self.settings and hasattr(self.settings, "G_EVAL_SAMPLING_NUMBER"):
+            self.n = int(self.settings["G_EVAL_SAMPLING_NUMBER"])
         print(f"G-Eval initialized")
 
     def evaluate(self):
@@ -67,12 +66,12 @@ class GEval:
             question = entity['question']
             answer = entity['answer']
             if not answer:
-                answer = llm_handler.ask_llm(prompt=question)[0]
+                answer = self.ask_llm(prompt=question)
             cur_prompt = prompt.replace('{{Question}}', question).replace('{{Answer}}', answer)
             entity['prompt'] = cur_prompt
             while True:
                 try:
-                    _response = llm_handler.ask_llm(
+                    _response = self.ask_llm(
                         prompt=cur_prompt,
                         temperature=0,
                         max_new_tokens=5,

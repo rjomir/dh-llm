@@ -4,36 +4,25 @@ import { useForm, Controller } from 'react-hook-form';
 import { InputText } from 'primereact/inputtext';
 import { Button } from 'primereact/button';
 import { ProgressSpinner } from 'primereact/progressspinner';
-
-const settingsOptions = [
-  { name: 'General', value: 1 },
-  { name: 'Bert score', value: 2 },
-  { name: 'G-eval', value: 3 },
-];
+import { settingsTabs, settings, defaultFormState } from '../config.js';
 
 export const Settings = () => {
-  const initialState = {
-    openaiKey: '',
-    openaiModel: '',
-    openaiMaxTokens: 0,
-    bertScoreSamplingNr: 0,
-    gEvalSamplingNr: 0,
-  };
-
-  const [selectedSettings, setSelectedSettings] = React.useState(1);
+  const [selectedSettings, setSelectedSettings] = React.useState(
+    settingsTabs[0],
+  );
   const [loading, setLoading] = React.useState(false);
 
   const { handleSubmit, control, reset } = useForm({
     mode: 'onTouched',
     reValidateMode: 'onSubmit',
-    defaultValues: initialState,
+    defaultValues: defaultFormState(),
   });
 
   React.useEffect(() => {
     const fetchData = async () => {
       const response = await fetch(`http://localhost:5005/settings`);
       const result = await response.json();
-      reset(result);
+      reset(result.content);
     };
 
     fetchData();
@@ -41,6 +30,7 @@ export const Settings = () => {
 
   const onSubmit = async (values) => {
     setLoading(true);
+    console.log(values);
     delete values['id'];
     const response = await fetch('http://localhost:5005/settings', {
       method: 'POST',
@@ -48,7 +38,7 @@ export const Settings = () => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        ...values,
+        content: values,
       }),
     });
     await response.json();
@@ -60,10 +50,12 @@ export const Settings = () => {
   return (
     <div className="page-wrapper">
       <SelectButton
-        value={selectedSettings}
-        onChange={(e) => setSelectedSettings(e.value)}
+        value={selectedSettings.value}
+        onChange={(e) => {
+          setSelectedSettings(settingsTabs[e.value]);
+        }}
         optionLabel="name"
-        options={settingsOptions}
+        options={settingsTabs}
       />
       <div className="content">
         <form
@@ -71,90 +63,25 @@ export const Settings = () => {
           onSubmit={handleSubmit(onSubmit)}
           className="flex flex-column gap-2"
         >
-          {selectedSettings === 1 && (
-            <>
+          {settings[selectedSettings.name].map((f) => {
+            return (
               <Controller
-                name="openaiKey"
+                key={f.name}
+                name={f.name}
                 control={control}
                 render={({ field, fieldState }) => (
                   <>
-                    <label htmlFor="openaiKey">OPEN_API_KEY:</label>
+                    <label htmlFor={f.name}>{f.name}:</label>
                     <InputText
-                      id={field.openaiKey}
-                      type="password"
+                      id={field[f.name]}
+                      type={f.secret ? 'password' : 'text'}
                       {...field}
                     />
                   </>
                 )}
               />
-              <Controller
-                name="openaiModel"
-                control={control}
-                render={({ field, fieldState }) => (
-                  <>
-                    <label htmlFor="openaiModel">OPEN_API_MODEL:</label>
-                    <InputText id={field.openaiModel} {...field} />
-                  </>
-                )}
-              />
-              <Controller
-                name="openaiMaxTokens"
-                control={control}
-                render={({ field, fieldState }) => (
-                  <>
-                    <label htmlFor="openaiMaxTokens">
-                      OPEN_API_MAX_TOKENS:
-                    </label>
-                    <InputText
-                      id={field.openaiMaxTokens}
-                      type="number"
-                      {...field}
-                    />
-                  </>
-                )}
-              />
-            </>
-          )}
-          {selectedSettings === 2 && (
-            <>
-              <Controller
-                name="bertScoreSamplingNr"
-                control={control}
-                render={({ field, fieldState }) => (
-                  <>
-                    <label htmlFor="bertScoreSamplingNr">
-                      BERT_SCORE_SAMPLING_NUMBER:
-                    </label>
-                    <InputText
-                      id={field.bertScoreSamplingNr}
-                      type="number"
-                      {...field}
-                    />
-                  </>
-                )}
-              />
-            </>
-          )}
-          {selectedSettings === 3 && (
-            <>
-              <Controller
-                name="gEvalSamplingNr"
-                control={control}
-                render={({ field, fieldState }) => (
-                  <>
-                    <label htmlFor="gEvalSamplingNr">
-                      G_EVAL_SAMPLING_NUMBER:
-                    </label>
-                    <InputText
-                      id={field.gEvalSamplingNr}
-                      type="number"
-                      {...field}
-                    />
-                  </>
-                )}
-              />
-            </>
-          )}
+            );
+          })}
         </form>
       </div>
       <Button form="settings" type="submit">

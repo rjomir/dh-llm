@@ -1,16 +1,17 @@
-import spacy
 from selfcheckgpt.modeling_ngram import UnigramModel, NgramModel
-from config import llm_handler
+from .base import Base
 
 
-class SelfCheckNgram:
+class SelfCheckNgram(Base):
     def __init__(self, n: int, lowercase: bool = True, dataset=None):
+        super().__init__()
         if dataset is None:
             dataset = []
         self.n = n
+        if self.settings and hasattr(self.settings, "NGRAM_SAMPLING_NUMBER"):
+            self.n = self.settings["NGRAM_SAMPLING_NUMBER"]
         self.lowercase = lowercase
         self.dataset = dataset
-        self.nlp = spacy.load("en_core_web_sm")
 
         print(f"SelfCheck-{n}gram initialized")
 
@@ -27,11 +28,11 @@ class SelfCheckNgram:
         for entity in self.dataset:
             answer = entity["answer"]
             if not answer:
-                answer = llm_handler.ask_llm(prompt=entity["question"])[0]
+                answer = self.ask_llm(prompt=entity["question"])[0]
             passage = entity["question"] + '.' + answer
             ngram_model.add(passage)
             ngram_model.train()
-            sentences = [sent.text.strip() for sent in self.nlp(passage).sents]
+            sentences = self.extract_sentence(passage)
             ngram_pred = ngram_model.evaluate(sentences=sentences)
 
             results.append({
