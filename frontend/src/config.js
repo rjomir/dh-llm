@@ -35,6 +35,12 @@ const arr = [
     secret: false,
     tab: 'Chainpoll',
   },
+  {
+    name: 'SERPER_API_KEY',
+    value: '',
+    secret: true,
+    tab: 'RefChecker'
+  }
 ];
 
 export const defaultFormState = () => {

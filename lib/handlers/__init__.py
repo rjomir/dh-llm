@@ -1,3 +1,6 @@
 from .SentenceExtractorHandler import SentenceExtractorHandler
 from .DbResourceHandler import DbResourceHandler
 from .OpenAIHandler import OpenAIHandler
+from .GoogleRetrieverHandler import GoogleRetrieverHandler
+from .ExtractorBase import ExtractorBase
+from .TripletExtractionHandler import TripletExtractionHandler

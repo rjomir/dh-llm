@@ -3,4 +3,5 @@ export const methodOptions = [
   { label: 'Ngram', value: 'ngram' },
   { label: 'Chainpoll', value: 'chainpoll' },
   { label: 'G-eval', value: 'g-eval' },
+  { label: 'RefChecker', value: 'ref-checker' }
 ];
